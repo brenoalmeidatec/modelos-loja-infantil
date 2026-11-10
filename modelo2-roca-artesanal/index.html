@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pequenos do Campo · Roupinhas infantis feitas à mão</title>
+<meta name="description" content="Roupas infantis artesanais, peças únicas feitas à mão e inspiradas na beleza do campo.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="pular" href="#pecas">Pular para as peças</a>
+
+<header class="topo">
+  <a class="marca" href="#topo" data-loja="nome"></a>
+  <nav aria-label="Principal">
+    <a href="#colecoes">Coleções</a>
+    <a href="#pecas">Peças</a>
+    <a href="#atelie">Ateliê</a>
+    <a href="#contato">Contato</a>
+  </nav>
+  <button class="carrinho" data-abrir-carrinho>
+    Carrinho <span class="selo" data-carrinho-qtd hidden>0</span>
+  </button>
+</header>
+
+<main id="topo">
+  <section class="heroi">
+    <div class="heroi-texto">
+      <h1>Roupa de criança <em>costurada devagar</em>, como antigamente.</h1>
+      <p class="heroi-sub" data-loja="slogan"></p>
+      <p class="heroi-detalhe">Cada peça é cortada, costurada e bordada à mão, em pequenas quantidades.</p>
+      <div class="heroi-botoes">
+        <a class="btn" href="#pecas">Ver as peças</a>
+        <a class="link-sub" href="#atelie">Conheça o ateliê</a>
+      </div>
+    </div>
+    <figure class="heroi-arco" aria-hidden="true">
+      <div class="arco"><div class="arco-int" data-arte="foto:fotos/foto12.jpg"></div></div>
+      <div class="selo-mao"><svg viewBox="0 0 120 120"><defs><path id="circ" d="M60 60m-44 0a44 44 0 1 1 88 0a44 44 0 1 1-88 0"/></defs><text><textPath href="#circ" startOffset="0" font-size="13.5" letter-spacing="3.2" font-family="Karla, sans-serif" font-weight="700" fill="currentColor">FEITO À MÃO · PEÇA ÚNICA · </textPath></text><path d="M44 66l16-20 16 20M60 46v34" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" transform="translate(0 -2)"/></svg></div>
+    </figure>
+  </section>
+
+  <section class="colecoes" id="colecoes" aria-labelledby="t-col">
+    <h2 id="t-col">Coleções</h2>
+    <ul class="lista-col" data-colecoes></ul>
+  </section>
+
+  <section class="pecas" id="pecas" aria-labelledby="t-pecas">
+    <div class="pecas-topo">
+      <h2 id="t-pecas">Peças disponíveis</h2>
+      <div class="filtros" data-filtros aria-label="Filtrar por coleção"></div>
+    </div>
+    <div class="grade" data-grade></div>
+  </section>
+
+  <section class="atelie" id="atelie" aria-labelledby="t-atl">
+    <div class="atelie-moldura">
+      <h2 id="t-atl">Do ateliê para o seu pequeno</h2>
+      <p>Aqui ninguém corre. A gente escolhe o tecido, risca, corta, costura e faz o acabamento com calma, porque roupa de criança precisa aguentar quintal, escorregador e abraço apertado.</p>
+      <p>Por isso as peças são poucas e cada uma é diferente da outra. Se gostou de algo e não tem o seu tamanho, é só chamar: muitas coisas saem sob encomenda.</p>
+      <dl class="cuidados">
+        <div><dt>Tecidos</dt><dd>Algodão e tecidos leves que respiram</dd></div>
+        <div><dt>Acabamento</dt><dd>Bordados e detalhes feitos à mão</dd></div>
+        <div><dt>Quantidade</dt><dd>Poucas peças de cada modelo</dd></div>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape" id="contato">
+  <div>
+    <strong data-loja="nome"></strong>
+    <p data-loja="slogan"></p>
+  </div>
+  <ul>
+    <li data-loja-se="cidade"><span data-loja="cidade"></span></li>
+    <li data-loja-se="cnpj">CNPJ <span data-loja="cnpj"></span></li>
+    <li data-loja-se="instagram"><a data-loja-insta href="#">Instagram</a></li>
+    <li data-loja-se="whatsapp">Atendimento pelo WhatsApp</li>
+    <li data-loja="frete"></li>
+  </ul>
+  <p class="rodape-mini">Modelo de demonstração. By Hazak and Claude</p>
+</footer>
+
+<script src="../shared/config.js"></script>
+<script src="../shared/loja.js"></script>
+<script>
+  Loja.iniciar();
+  document.querySelectorAll("[data-arte]").forEach(function (el) {
+    Loja.arteEl(el);
+  });
+  var cores = { Vestidos: ["vestido", "#B5533C", "#F1E3C8"], Meninos: ["menino", "#6F8F5E", "#E9D7B0"], Princesas: ["princesa", "#C98E9A", "#F6E7E1"], Natal: ["natal", "#9E2F28", "#FFF4E3"] };
+  var prods = Loja.produtos();
+  document.querySelector("[data-colecoes]").innerHTML = Loja.categorias().map(function (c) {
+    var n = prods.filter(function (p) { return p.categoria === c; }).length, a = cores[c] || ["vestido", "#B5533C", "#F1E3C8"];
+    return '<li><a href="#pecas" data-ir-categoria="' + Loja.esc(c) + '"><span class="col-nome">' + Loja.esc(c) + '</span>' +
+      '<span class="col-qtd">' + n + (n === 1 ? " peça" : " peças") + '</span><span class="col-mini">' + Loja.arte(a[0], a[1], a[2]) + '</span>' +
+      '<svg class="seta" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>';
+  }).join("");
+  Loja.vitrine({
+    alvo: "[data-grade]", filtros: "[data-filtros]",
+    card: function (p) {
+      return '<button class="cartao" data-produto="' + Loja.esc(p.id) + '">' +
+        '<span class="cartao-img">' + Loja.imagem(p) + '</span>' +
+        '<span class="cartao-linha"><span class="cartao-nome">' + Loja.esc(p.nome) + '</span><span class="cartao-preco">' + Loja.brl(p.preco) + '</span></span>' +
+        '<span class="cartao-cat">' + Loja.esc(p.categoria) + (p.tamanhos && p.tamanhos.length ? " · tam. " + Loja.esc(p.tamanhos.join(", ")) : "") + '</span></button>';
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pequenos do Campo · Roupinhas infantis feitas à mão</title>
+<meta name="description" content="Roupas infantis artesanais, peças únicas feitas à mão e inspiradas na beleza do campo.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="pular" href="#pecas">Pular para as peças</a>
+
+<header class="topo">
+  <a class="marca" href="#topo" data-loja="nome"></a>
+  <nav aria-label="Principal"><a href="#mosaico">Categorias</a><a href="#pecas">Peças</a><a href="#como">Como comprar</a><a href="#contato">Contato</a></nav>
+  <button class="carrinho" data-abrir-carrinho aria-label="Abrir carrinho">
+    <span>Carrinho</span><span class="selo" data-carrinho-qtd hidden>0</span>
+  </button>
+</header>
+
+<main id="topo">
+  <section class="heroi">
+    <div class="heroi-a">
+      <h1>Pequenas roupas.<br>Grandes <span>brincadeiras.</span></h1>
+      <p data-loja="slogan"></p>
+      <a class="btn" href="#pecas">Comprar agora</a>
+    </div>
+    <div class="heroi-b" aria-hidden="true"><div data-arte="foto:fotos/foto12.jpg"></div></div>
+    <div class="heroi-c" aria-hidden="true"><div data-arte="foto:fotos/foto05.jpg"></div></div>
+  </section>
+
+  <div class="faixa-texto" aria-hidden="true"><div class="faixa-trilho">
+    <span>Feito à mão</span><span>Peça única</span><span>Poucas unidades</span><span>Sob encomenda</span>
+  </div></div>
+
+  <section class="mosaico" id="mosaico" aria-labelledby="t-cat">
+    <h2 id="t-cat">Escolha por categoria</h2>
+    <div class="mosaico-grade">
+      <a class="m m1" href="#pecas" data-ir-categoria="Vestidos"><b>Vestidos</b><div data-arte="foto:fotos/foto04.jpg"></div></a>
+      <a class="m m2" href="#pecas" data-ir-categoria="Meninos"><b>Meninos</b><div data-arte="menino|#1F6B4D|#E8F1EA"></div></a>
+      <a class="m m3" href="#pecas" data-ir-categoria="Princesas"><b>Princesas</b><div data-arte="foto:fotos/foto09.jpg"></div></a>
+      <a class="m m4" href="#pecas" data-ir-categoria="Natal"><b>Natal</b><div data-arte="natal|#C62828|#FFF1E0"></div></a>
+    </div>
+  </section>
+
+  <section class="pecas" id="pecas" aria-labelledby="t-pecas">
+    <div class="pecas-topo">
+      <h2 id="t-pecas">As peças</h2>
+      <div class="filtros" data-filtros aria-label="Filtrar por categoria"></div>
+    </div>
+    <div class="grade" data-grade></div>
+  </section>
+
+  <section class="como" id="como" aria-labelledby="t-como">
+    <h2 id="t-como">Comprar é simples</h2>
+    <ol>
+      <li><b>1</b><div><strong>Escolha a peça</strong><span>Toque na peça, veja os detalhes e escolha o tamanho.</span></div></li>
+      <li><b>2</b><div><strong>Monte o carrinho</strong><span>Adicione quantas peças quiser e confira o total.</span></div></li>
+      <li><b>3</b><div><strong>Finalize no WhatsApp</strong><span>O pedido segue pronto para a loja confirmar o frete e o pagamento.</span></div></li>
+    </ol>
+  </section>
+</main>
+
+<footer class="rodape" id="contato">
+  <div><strong data-loja="nome"></strong><p data-loja="slogan"></p></div>
+  <ul>
+    <li data-loja-se="cidade"><span data-loja="cidade"></span></li>
+    <li data-loja-se="cnpj">CNPJ <span data-loja="cnpj"></span></li>
+    <li data-loja-se="instagram"><a data-loja-insta href="#">Instagram</a></li>
+    <li data-loja-se="whatsapp">Atendimento pelo WhatsApp</li>
+    <li data-loja="frete"></li>
+  </ul>
+  <p class="rodape-mini">Modelo de demonstração. By Hazak and Claude</p>
+</footer>
+
+<script src="../shared/config.js"></script>
+<script src="../shared/loja.js"></script>
+<script>
+  Loja.iniciar();
+  document.querySelectorAll("[data-arte]").forEach(function (el) {
+    Loja.arteEl(el);
+  });
+  Loja.vitrine({
+    alvo: "[data-grade]", filtros: "[data-filtros]",
+    card: function (p) {
+      return '<button class="cartao" data-produto="' + Loja.esc(p.id) + '">' +
+        '<span class="cartao-img">' + Loja.imagem(p) + '<span class="mais" aria-hidden="true">+</span></span>' +
+        '<span class="cartao-nome">' + Loja.esc(p.nome) + '</span>' +
+        '<span class="cartao-meta"><span class="cartao-preco">' + Loja.brl(p.preco) + '</span><span>' + Loja.esc(p.categoria) + '</span></span></button>';
+    }
+  });
+</script>
+</body>
+</html>

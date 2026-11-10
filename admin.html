@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel da loja · Cadastrar produtos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#f6f3ee; --card:#fff; --ink:#26211c; --muted:#6d655c; --line:#e3ddd3; --accent:#2f6b4f; --perigo:#b3261e; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 "DM Sans", system-ui, sans-serif; }
+  ::selection { background: var(--accent); color:#fff; }
+  :focus-visible { outline:3px solid var(--accent); outline-offset:2px; }
+  header { background:var(--card); border-bottom:1px solid var(--line); padding:16px 20px; display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; }
+  header h1 { margin:0; font-size:1.2rem; }
+  header a { color:var(--accent); font-weight:700; }
+  main { max-width:1100px; margin:0 auto; padding:24px 16px 64px; display:grid; gap:24px; }
+  section { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px; }
+  h2 { margin:0 0 4px; font-size:1.15rem; }
+  .dica { margin:0 0 16px; color:var(--muted); font-size:.92rem; }
+  .aviso { background:#fff4d6; color:#5b4400; padding:12px 14px; border-radius:10px; font-size:.92rem; }
+  form { display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); }
+  label { display:grid; gap:6px; font-weight:600; font-size:.92rem; }
+  label small { font-weight:400; color:var(--muted); }
+  input, select, textarea { font:inherit; padding:11px 12px; border:1.5px solid var(--line); border-radius:10px; background:#fff; color:var(--ink); min-height:46px; width:100%; }
+  textarea { min-height:90px; resize:vertical; }
+  .largo { grid-column:1/-1; }
+  .cores { display:flex; gap:12px; align-items:end; }
+  .cores input[type=color] { padding:3px; min-height:46px; width:64px; }
+  button { font:inherit; cursor:pointer; min-height:46px; padding:0 20px; border-radius:999px; border:1.5px solid var(--line); background:#fff; font-weight:700; color:var(--ink); }
+  button:hover { border-color:var(--ink); }
+  .primario { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .primario:hover { filter:brightness(1.1); border-color:var(--accent); }
+  .perigo { color:var(--perigo); border-color:#e8c4c1; }
+  .acoes { display:flex; flex-wrap:wrap; gap:10px; }
+  .previa { display:flex; gap:14px; align-items:center; }
+  .previa .quadro { width:84px; aspect-ratio:5/6; border-radius:10px; background:var(--line); overflow:hidden; flex:none; }
+  .previa img, .previa svg { width:100%; height:100%; object-fit:cover; }
+  table { width:100%; border-collapse:collapse; }
+  th, td { text-align:left; padding:10px 8px; border-bottom:1px solid var(--line); vertical-align:middle; }
+  th { font-size:.82rem; color:var(--muted); font-weight:700; }
+  td .mini { width:44px; aspect-ratio:5/6; border-radius:8px; overflow:hidden; background:var(--line); }
+  td .mini img, td .mini svg { width:100%; height:100%; object-fit:cover; }
+  td.num { font-variant-numeric:tabular-nums; white-space:nowrap; }
+  td button { min-height:38px; padding:0 14px; font-size:.88rem; }
+  .tabela-rolagem { overflow-x:auto; }
+  #msg { position:fixed; left:50%; bottom:20px; transform:translateX(-50%); background:var(--ink); color:#fff; padding:12px 20px; border-radius:999px; font-weight:600; opacity:0; pointer-events:none; transition:opacity .25s; max-width:calc(100% - 32px); text-align:center; }
+  #msg.on { opacity:1; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Painel da loja</h1>
+  <a href="index.html">← Voltar para os modelos</a>
+</header>
+<main>
+  <div class="aviso">Neste modelo de demonstração, o que você cadastrar fica salvo <strong>neste navegador</strong> e aparece nos 3 modelos. Na versão final, o cadastro fica guardado online para a loja inteira.</div>
+
+  <section aria-labelledby="t-prod">
+    <h2 id="t-prod"><span id="titulo-form">Cadastrar produto</span></h2>
+    <p class="dica">Preencha e toque em salvar. Sem foto, o site desenha a peça com as cores que você escolher.</p>
+    <form id="f-prod">
+      <label>Nome da peça<input id="p-nome" required maxlength="60" placeholder="Ex.: Vestido Girassol"></label>
+      <label>Preço (R$)<input id="p-preco" required inputmode="decimal" placeholder="89,90"></label>
+      <label>Categoria
+        <input id="p-cat" list="cats" required maxlength="30" placeholder="Vestidos, Meninos, Princesas, Natal…">
+        <datalist id="cats"></datalist>
+      </label>
+      <label>Tamanhos <small>separe por vírgula</small><input id="p-tams" placeholder="1, 2, 3, 4"></label>
+      <label class="largo">Descrição<textarea id="p-desc" maxlength="400" placeholder="Tecido, acabamento, o que torna a peça única…"></textarea></label>
+      <label>Foto da peça <small>opcional</small><input id="p-foto" type="file" accept="image/*"></label>
+      <label>Tipo do desenho <small>usado quando não há foto</small>
+        <select id="p-tipo"><option value="vestido">Vestido</option><option value="menino">Conjunto menino</option><option value="princesa">Princesa</option><option value="natal">Natal</option></select>
+      </label>
+      <div class="cores">
+        <label>Cor 1<input id="p-c1" type="color" value="#e9b8c4"></label>
+        <label>Cor 2<input id="p-c2" type="color" value="#fff7ec"></label>
+      </div>
+      <label><span>Destaque na página inicial</span><select id="p-dest"><option value="0">Não</option><option value="1">Sim</option></select></label>
+      <div class="previa largo"><div class="quadro" id="previa"></div><div class="acoes">
+        <button class="primario" type="submit">Salvar produto</button>
+        <button type="button" id="b-cancelar" hidden>Cancelar edição</button>
+        <button type="button" id="b-tirar-foto" hidden>Remover foto</button>
+      </div></div>
+    </form>
+  </section>
+
+  <section aria-labelledby="t-lista">
+    <h2 id="t-lista">Produtos cadastrados (<span id="qtd">0</span>)</h2>
+    <p class="dica">Toque em Editar para mudar preço, nome ou foto. Excluir não pode ser desfeito.</p>
+    <div class="tabela-rolagem"><table>
+      <thead><tr><th></th><th>Peça</th><th>Categoria</th><th>Preço</th><th>Ações</th></tr></thead>
+      <tbody id="lista"></tbody>
+    </table></div>
+  </section>
+
+  <section aria-labelledby="t-loja">
+    <h2 id="t-loja">Dados da loja</h2>
+    <p class="dica">Campos vazios não aparecem no site. O WhatsApp recebe os pedidos do carrinho.</p>
+    <form id="f-loja">
+      <label>Nome da loja<input id="c-nome" maxlength="50"></label>
+      <label>WhatsApp <small>só números, com DDD</small><input id="c-whatsapp" inputmode="numeric" placeholder="5571999999999"></label>
+      <label>CNPJ<input id="c-cnpj" placeholder="00.000.000/0000-00"></label>
+      <label>Cidade<input id="c-cidade" placeholder="Aratuípe/BA"></label>
+      <label>Instagram <small>sem o @</small><input id="c-instagram"></label>
+      <label class="largo">Frase da loja<input id="c-slogan" maxlength="120"></label>
+      <label class="largo">Aviso de frete e prazo<input id="c-frete" maxlength="140"></label>
+      <div class="acoes largo"><button class="primario" type="submit">Salvar dados da loja</button></div>
+    </form>
+  </section>
+
+  <section aria-labelledby="t-bkp">
+    <h2 id="t-bkp">Cópia de segurança</h2>
+    <p class="dica">Baixe uma cópia dos produtos e dos dados da loja, ou volte para os produtos de exemplo.</p>
+    <div class="acoes">
+      <button id="b-baixar" type="button">Baixar cópia</button>
+      <input id="b-subir" type="file" accept="application/json" hidden>
+      <button type="button" id="b-subir-btn">Restaurar cópia</button>
+      <button class="perigo" id="b-exemplos" type="button">Voltar aos produtos de exemplo</button>
+    </div>
+  </section>
+</main>
+<div id="msg" role="status"></div>
+
+<script src="shared/config.js"></script>
+<script src="shared/loja.js"></script>
+<script>
+(function () {
+  var L = window.Loja, $ = function (s) { return document.querySelector(s); };
+  var editando = null, fotoNova, fotoRemovida = false;
+
+  function aviso(t) { var m = $("#msg"); m.textContent = t; m.classList.add("on"); clearTimeout(aviso.t); aviso.t = setTimeout(function () { m.classList.remove("on"); }, 2800); }
+  function salvarProdutos(l) { if (!L.gravar(L.K.PROD, l)) { aviso("Não coube na memória do navegador. Use fotos menores."); return false; } return true; }
+  function preco(s) { return Number(String(s).replace(/\./g, "").replace(",", ".")); }
+  function novoId() { return "p" + Date.now().toString(36); }
+
+  function previa() {
+    var p = { nome: "", tipo: $("#p-tipo").value, cores: [$("#p-c1").value, $("#p-c2").value], foto: fotoRemovida ? null : (fotoNova !== undefined ? fotoNova : (editando && editando.foto)) };
+    $("#previa").innerHTML = L.imagem(p);
+    $("#b-tirar-foto").hidden = !p.foto;
+  }
+
+  function desenharLista() {
+    var l = L.produtos();
+    $("#qtd").textContent = l.length;
+    $("#cats").innerHTML = L.categorias().map(function (c) { return '<option value="' + L.esc(c) + '">'; }).join("");
+    $("#lista").innerHTML = l.length ? l.map(function (p) {
+      return '<tr><td><div class="mini">' + L.imagem(p) + '</div></td><td><strong>' + L.esc(p.nome) + '</strong></td><td>' + L.esc(p.categoria) +
+        '</td><td class="num">' + L.brl(p.preco) + '</td><td><button data-ed="' + L.esc(p.id) + '">Editar</button> <button class="perigo" data-ex="' + L.esc(p.id) + '">Excluir</button></td></tr>';
+    }).join("") : '<tr><td colspan="5">Nenhum produto ainda. Cadastre o primeiro acima.</td></tr>';
+  }
+
+  function limparForm() {
+    editando = null; fotoNova = undefined; fotoRemovida = false;
+    $("#f-prod").reset(); $("#p-c1").value = "#e9b8c4"; $("#p-c2").value = "#fff7ec";
+    $("#titulo-form").textContent = "Cadastrar produto"; $("#b-cancelar").hidden = true; previa();
+  }
+
+  function reduzir(arq, cb) {
+    var r = new FileReader();
+    r.onload = function () {
+      var im = new Image();
+      im.onload = function () {
+        var max = 800, esc = Math.min(1, max / Math.max(im.width, im.height)), c = document.createElement("canvas");
+        c.width = Math.round(im.width * esc); c.height = Math.round(im.height * esc);
+        c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
+        cb(c.toDataURL("image/jpeg", 0.78));
+      };
+      im.src = r.result;
+    };
+    r.readAsDataURL(arq);
+  }
+
+  $("#p-foto").addEventListener("change", function (e) {
+    var a = e.target.files[0]; if (!a) return;
+    reduzir(a, function (d) { fotoNova = d; fotoRemovida = false; previa(); });
+  });
+  ["#p-tipo", "#p-c1", "#p-c2"].forEach(function (s) { $(s).addEventListener("input", previa); });
+  $("#b-tirar-foto").addEventListener("click", function () { fotoRemovida = true; fotoNova = undefined; $("#p-foto").value = ""; previa(); });
+  $("#b-cancelar").addEventListener("click", limparForm);
+
+  $("#f-prod").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var v = preco($("#p-preco").value);
+    if (!(v > 0)) { aviso("Digite um preço válido, por exemplo 89,90."); $("#p-preco").focus(); return; }
+    var l = L.produtos(), foto = fotoRemovida ? null : (fotoNova !== undefined ? fotoNova : (editando ? editando.foto : null));
+    var p = {
+      id: editando ? editando.id : novoId(), nome: $("#p-nome").value.trim(), preco: v, categoria: $("#p-cat").value.trim(),
+      tamanhos: $("#p-tams").value.split(",").map(function (s) { return s.trim(); }).filter(Boolean),
+      descricao: $("#p-desc").value.trim(), tipo: $("#p-tipo").value, cores: [$("#p-c1").value, $("#p-c2").value],
+      destaque: $("#p-dest").value === "1", foto: foto || undefined
+    };
+    var i = l.findIndex(function (x) { return x.id === p.id; });
+    if (i >= 0) l[i] = p; else l.unshift(p);
+    if (salvarProdutos(l)) { aviso(editando ? "Produto atualizado." : "Produto cadastrado. Já aparece no site."); limparForm(); desenharLista(); }
+  });
+
+  $("#lista").addEventListener("click", function (e) {
+    var ed = e.target.closest("[data-ed]"), ex = e.target.closest("[data-ex]");
+    if (ed) {
+      var p = L.produtos().filter(function (x) { return x.id === ed.getAttribute("data-ed"); })[0]; if (!p) return;
+      editando = p; fotoNova = undefined; fotoRemovida = false;
+      $("#p-nome").value = p.nome; $("#p-preco").value = String(p.preco).replace(".", ","); $("#p-cat").value = p.categoria || "";
+      $("#p-tams").value = (p.tamanhos || []).join(", "); $("#p-desc").value = p.descricao || ""; $("#p-tipo").value = p.tipo || "vestido";
+      $("#p-c1").value = (p.cores || [])[0] || "#e9b8c4"; $("#p-c2").value = (p.cores || [])[1] || "#fff7ec"; $("#p-dest").value = p.destaque ? "1" : "0";
+      $("#titulo-form").textContent = "Editar: " + p.nome; $("#b-cancelar").hidden = false; previa();
+      $("#f-prod").scrollIntoView({ behavior: "smooth", block: "start" }); $("#p-nome").focus();
+    }
+    if (ex) {
+      var q = L.produtos().filter(function (x) { return x.id === ex.getAttribute("data-ex"); })[0];
+      if (q && confirm("Excluir “" + q.nome + "”? Isso não pode ser desfeito.")) {
+        if (salvarProdutos(L.produtos().filter(function (x) { return x.id !== q.id; }))) { aviso("Produto excluído."); desenharLista(); }
+      }
+    }
+  });
+
+  /* dados da loja */
+  var campos = ["nome", "whatsapp", "cnpj", "cidade", "instagram", "slogan", "frete"];
+  function preencherLoja() { var c = L.config(); campos.forEach(function (k) { $("#c-" + k).value = c[k] || ""; }); }
+  $("#f-loja").addEventListener("submit", function (e) {
+    e.preventDefault(); var c = {};
+    campos.forEach(function (k) { c[k] = $("#c-" + k).value.trim(); });
+    c.whatsapp = c.whatsapp.replace(/\D/g, ""); c.instagram = c.instagram.replace(/^@/, "");
+    if (L.gravar(L.K.CFG, c)) aviso("Dados da loja salvos."); else aviso("Não foi possível salvar.");
+  });
+
+  /* backup */
+  $("#b-baixar").addEventListener("click", function () {
+    var blob = new Blob([JSON.stringify({ produtos: L.produtos(), config: L.config() }, null, 2)], { type: "application/json" });
+    var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "copia-da-loja.json"; a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  });
+  $("#b-subir-btn").addEventListener("click", function () { $("#b-subir").click(); });
+  $("#b-subir").addEventListener("change", function (e) {
+    var a = e.target.files[0]; if (!a) return; var r = new FileReader();
+    r.onload = function () {
+      try {
+        var d = JSON.parse(r.result);
+        if (!Array.isArray(d.produtos)) throw 0;
+        if (confirm("Substituir os produtos atuais por esta cópia?")) { L.gravar(L.K.PROD, d.produtos); if (d.config) L.gravar(L.K.CFG, d.config); desenharLista(); preencherLoja(); aviso("Cópia restaurada."); }
+      } catch (x) { aviso("Esse arquivo não parece ser uma cópia da loja."); }
+    };
+    r.readAsText(a); e.target.value = "";
+  });
+  $("#b-exemplos").addEventListener("click", function () {
+    if (confirm("Apagar os produtos cadastrados e voltar aos exemplos?")) { try { localStorage.removeItem(L.K.PROD); } catch (x) {} desenharLista(); aviso("Produtos de exemplo restaurados."); }
+  });
+
+  desenharLista(); preencherLoja(); previa();
+})();
+</script>
+</body>
+</html>

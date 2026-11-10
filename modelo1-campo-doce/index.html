@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pequenos do Campo · Roupinhas infantis feitas à mão</title>
+<meta name="description" content="Roupas infantis artesanais, peças únicas feitas à mão e inspiradas na beleza do campo.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="pular" href="#vitrine">Pular para as peças</a>
+
+<div class="faixa"><p>Peças únicas, feitas à mão · <span data-loja="frete"></span></p></div>
+
+<header class="topo">
+  <a class="marca" href="#inicio" aria-label="Início">
+    <svg viewBox="0 0 40 40" width="38" height="38" aria-hidden="true"><circle cx="20" cy="20" r="20" fill="#F7CB57"/><circle cx="20" cy="20" r="11" fill="none" stroke="#2B2A4C" stroke-width="2.5"/><g fill="#2B2A4C"><circle cx="16.5" cy="16.5" r="1.8"/><circle cx="23.5" cy="16.5" r="1.8"/><circle cx="16.5" cy="23.5" r="1.8"/><circle cx="23.5" cy="23.5" r="1.8"/></g></svg>
+    <span data-loja="nome"></span>
+  </a>
+  <nav class="menu" aria-label="Principal">
+    <a href="#categorias">Categorias</a>
+    <a href="#vitrine">Peças</a>
+    <a href="#natal">Natal</a>
+    <a href="#feito-a-mao">Feito à mão</a>
+    <a href="#contato">Contato</a>
+  </nav>
+  <button class="carrinho" data-abrir-carrinho aria-label="Abrir carrinho">
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+    <span class="selo" data-carrinho-qtd hidden>0</span>
+  </button>
+</header>
+
+<main id="inicio">
+  <section class="heroi">
+    <div class="heroi-texto">
+      <p class="heroi-mini">Conforto, estilo e muito carinho</p>
+      <h1>Roupinhas feitas à mão para cada <em>aventura</em></h1>
+      <p class="heroi-sub" data-loja="slogan"></p>
+      <div class="heroi-botoes">
+        <a class="btn btn-cheio" href="#vitrine">Ver as peças</a>
+        <a class="btn btn-vazado" href="#categorias">Explorar categorias</a>
+      </div>
+    </div>
+    <div class="heroi-arte" aria-hidden="true">
+      <svg class="sol" viewBox="0 0 120 120"><circle cx="60" cy="60" r="30" fill="#F7CB57"/><g stroke="#F7CB57" stroke-width="6" stroke-linecap="round"><path d="M60 6v14M60 100v14M6 60h14M100 60h14M22 22l10 10M88 88l10 10M98 22L88 32M32 88L22 98"/></g></svg>
+      <svg class="nuvem n1" viewBox="0 0 120 60"><path d="M22 52a18 18 0 0 1 4-35 24 24 0 0 1 46-4 20 20 0 0 1 24 20 15 15 0 0 1-4 19z" fill="#fff"/></svg>
+      <svg class="nuvem n2" viewBox="0 0 120 60"><path d="M22 52a18 18 0 0 1 4-35 24 24 0 0 1 46-4 20 20 0 0 1 24 20 15 15 0 0 1-4 19z" fill="#fff"/></svg>
+      <svg class="varal" viewBox="0 0 560 60" preserveAspectRatio="none"><path d="M0 14Q280 54 560 14" fill="none" stroke="#2B2A4C" stroke-width="3" stroke-linecap="round"/></svg>
+      <div class="roupa r1" data-arte="foto:fotos/foto05.jpg"></div>
+      <div class="roupa r2" data-arte="foto:fotos/foto09.jpg"></div>
+      <div class="roupa r3" data-arte="foto:fotos/foto12.jpg"></div>
+    </div>
+  </section>
+
+  <section class="cats" id="categorias" aria-labelledby="t-cats">
+    <h2 id="t-cats" class="so-leitor">Categorias</h2>
+    <a class="cat c-vestidos" href="#vitrine" data-ir-categoria="Vestidos"><span>Vestidos</span><div data-arte="foto:fotos/foto04.jpg"></div></a>
+    <a class="cat c-meninos" href="#vitrine" data-ir-categoria="Meninos"><span>Meninos</span><div data-arte="menino|#7FA6C9|#F3E3C3"></div></a>
+    <a class="cat c-princesas" href="#vitrine" data-ir-categoria="Princesas"><span>Princesas</span><div data-arte="foto:fotos/foto09.jpg"></div></a>
+    <a class="cat c-natal" href="#vitrine" data-ir-categoria="Natal"><span>Natal</span><div data-arte="natal|#C0392B|#FFF4E3"></div></a>
+  </section>
+
+  <section class="vitrine" id="vitrine" aria-labelledby="t-vit">
+    <div class="vitrine-topo">
+      <h2 id="t-vit">Nossas peças</h2>
+      <div class="filtros" data-filtros aria-label="Filtrar por categoria"></div>
+    </div>
+    <div class="grade" data-grade></div>
+  </section>
+
+  <section class="banner" id="natal" aria-labelledby="t-natal">
+    <div class="banner-arte" aria-hidden="true" data-arte="natal|#B63A32|#FFF4E3"></div>
+    <div>
+      <h2 id="t-natal">Coleção de Natal, em poucas peças</h2>
+      <p>Vestidos e conjuntos vermelhos e verdes, com pinheirinhos e pompons costurados à mão. Quando acaba, acabou.</p>
+      <a class="btn btn-cheio" href="#vitrine" data-ir-categoria="Natal">Ver coleção de Natal</a>
+    </div>
+  </section>
+
+  <section class="mao" id="feito-a-mao" aria-labelledby="t-mao">
+    <h2 id="t-mao">Cada peça passa pelas mãos de quem costura</h2>
+    <div class="mao-colunas">
+      <p>Cortamos, costuramos e bordamos em pequenas quantidades. Por isso a peça que chega até você tem um jeito só dela, e dificilmente outra criança vai estar vestindo igual.</p>
+      <p>Usamos tecidos leves e macios, que respiram, com acabamentos pensados para brincar, correr e se sujar sem perder o conforto.</p>
+      <p>Não achou o tamanho? Fale com a gente. Muitas peças podem ser feitas sob encomenda.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape" id="contato">
+  <div>
+    <strong class="rodape-nome" data-loja="nome"></strong>
+    <p data-loja="slogan"></p>
+  </div>
+  <ul>
+    <li data-loja-se="cidade"><span data-loja="cidade"></span></li>
+    <li data-loja-se="cnpj">CNPJ <span data-loja="cnpj"></span></li>
+    <li data-loja-se="instagram"><a data-loja-insta href="#">Instagram</a></li>
+    <li data-loja-se="whatsapp">Atendimento pelo WhatsApp</li>
+  </ul>
+  <p class="rodape-mini">Modelo de demonstração. By Hazak and Claude</p>
+</footer>
+
+<script src="../shared/config.js"></script>
+<script src="../shared/loja.js"></script>
+<script>
+  Loja.iniciar();
+  document.querySelectorAll("[data-arte]").forEach(function (el) {
+    Loja.arteEl(el);
+  });
+  Loja.vitrine({
+    alvo: "[data-grade]", filtros: "[data-filtros]",
+    card: function (p, i) {
+      var bg = ["#FDE4E0", "#DDEFF8", "#E9E1F7", "#E3F0DE", "#FFF0C9"][i % 5];
+      return '<button class="cartao" data-produto="' + Loja.esc(p.id) + '" style="--tom:' + bg + '">' +
+        '<span class="cartao-img">' + Loja.imagem(p) + '</span>' +
+        '<span class="cartao-cat">' + Loja.esc(p.categoria) + '</span>' +
+        '<span class="cartao-nome">' + Loja.esc(p.nome) + '</span>' +
+        '<span class="cartao-preco">' + Loja.brl(p.preco) + '</span></button>';
+    }
+  });
+</script>
+</body>
+</html>
