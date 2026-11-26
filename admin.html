@@ -3,27 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Painel da loja · Cadastrar produtos</title>
+<meta name="robots" content="noindex">
+<title>Painel da loja · Pedidos, clientes e pagamentos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root { --bg:#f6f3ee; --card:#fff; --ink:#26211c; --muted:#6d655c; --line:#e3ddd3; --accent:#2f6b4f; --perigo:#b3261e; }
   * { box-sizing: border-box; }
+  [hidden] { display:none !important; }
   body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 "DM Sans", system-ui, sans-serif; }
   ::selection { background: var(--accent); color:#fff; }
   :focus-visible { outline:3px solid var(--accent); outline-offset:2px; }
-  header { background:var(--card); border-bottom:1px solid var(--line); padding:16px 20px; display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; }
+  header { background:var(--card); border-bottom:1px solid var(--line); padding:14px 20px; display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; }
   header h1 { margin:0; font-size:1.2rem; }
-  header a { color:var(--accent); font-weight:700; }
-  main { max-width:1100px; margin:0 auto; padding:24px 16px 64px; display:grid; gap:24px; }
-  section { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px; }
-  h2 { margin:0 0 4px; font-size:1.15rem; }
-  .dica { margin:0 0 16px; color:var(--muted); font-size:.92rem; }
+  header nav { display:flex; gap:16px; align-items:center; }
+  header a, .linkbtn { color:var(--accent); font-weight:700; background:none; border:0; min-height:0; padding:0; text-decoration:underline; }
+  main { max-width:1150px; margin:0 auto; padding:20px 16px 64px; display:grid; gap:20px; }
+  section.painel-sec, .cartao { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px; }
+  h2 { margin:0 0 4px; font-size:1.15rem; } h3 { margin:0 0 10px; font-size:1.02rem; }
+  .dica { margin:0 0 14px; color:var(--muted); font-size:.92rem; }
   .aviso { background:#fff4d6; color:#5b4400; padding:12px 14px; border-radius:10px; font-size:.92rem; }
   form { display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); }
   label { display:grid; gap:6px; font-weight:600; font-size:.92rem; }
   label small { font-weight:400; color:var(--muted); }
   input, select, textarea { font:inherit; padding:11px 12px; border:1.5px solid var(--line); border-radius:10px; background:#fff; color:var(--ink); min-height:46px; width:100%; }
+  input[type=checkbox], input[type=radio] { width:20px; min-height:20px; accent-color:var(--accent); }
   textarea { min-height:90px; resize:vertical; }
   .largo { grid-column:1/-1; }
   .cores { display:flex; gap:12px; align-items:end; }
@@ -33,7 +37,7 @@
   .primario { background:var(--accent); border-color:var(--accent); color:#fff; }
   .primario:hover { filter:brightness(1.1); border-color:var(--accent); }
   .perigo { color:var(--perigo); border-color:#e8c4c1; }
-  .acoes { display:flex; flex-wrap:wrap; gap:10px; }
+  .acoes { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
   .previa { display:flex; gap:14px; align-items:center; }
   .previa .quadro { width:84px; aspect-ratio:5/6; border-radius:10px; background:var(--line); overflow:hidden; flex:none; }
   .previa img, .previa svg { width:100%; height:100%; object-fit:cover; }
@@ -44,93 +48,264 @@
   td .mini img, td .mini svg { width:100%; height:100%; object-fit:cover; }
   td.num { font-variant-numeric:tabular-nums; white-space:nowrap; }
   td button { min-height:38px; padding:0 14px; font-size:.88rem; }
+  td input[type=text], td input:not([type]) { min-height:40px; }
   .tabela-rolagem { overflow-x:auto; }
-  #msg { position:fixed; left:50%; bottom:20px; transform:translateX(-50%); background:var(--ink); color:#fff; padding:12px 20px; border-radius:999px; font-weight:600; opacity:0; pointer-events:none; transition:opacity .25s; max-width:calc(100% - 32px); text-align:center; }
+  #msg { position:fixed; left:50%; bottom:20px; transform:translateX(-50%); background:var(--ink); color:#fff; padding:12px 20px; border-radius:999px; font-weight:600; opacity:0; pointer-events:none; transition:opacity .25s; max-width:calc(100% - 32px); text-align:center; z-index:99; }
   #msg.on { opacity:1; }
+
+  /* login */
+  #login { min-height:80vh; display:grid; place-items:center; padding:16px; }
+  #login .cartao { width:min(400px,100%); display:grid; gap:14px; }
+  #login form { grid-template-columns:1fr; }
+  .erro { color:var(--perigo); margin:0; min-height:1.3em; font-size:.9rem; }
+
+  /* abas */
+  .abas { display:flex; gap:6px; overflow-x:auto; padding-bottom:4px; }
+  .abas button { white-space:nowrap; min-height:42px; }
+  .abas button[aria-selected=true] { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .barra { display:flex; flex-wrap:wrap; gap:12px; align-items:end; margin-bottom:14px; }
+  .barra label { min-width:180px; flex:1; max-width:320px; }
+
+  /* visão geral */
+  .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; margin-bottom:16px; }
+  .kpi { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; display:grid; gap:4px; }
+  .kpi span { font-size:.82rem; color:var(--muted); font-weight:700; } .kpi strong { font-size:1.3rem; font-variant-numeric:tabular-nums; }
+  .duas { display:grid; grid-template-columns:1.5fr 1fr; gap:16px; margin-bottom:16px; }
+  @media (max-width:820px) { .duas { grid-template-columns:1fr; } }
+  .cartao svg { width:100%; height:170px; }
+  .eixo { display:flex; justify-content:space-between; color:var(--muted); font-size:.8rem; }
+  .rank { position:relative; display:flex; justify-content:space-between; gap:10px; padding:8px 0 12px; font-size:.92rem; }
+  .rank i { position:absolute; left:0; bottom:4px; height:5px; border-radius:3px; background:var(--accent); opacity:.75; }
+  .rank2 { display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; padding:7px 0; border-bottom:1px solid var(--line); font-size:.92rem; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px 6px; align-items:center; }
+  .vazio-grande { text-align:center; padding:40px 16px; background:var(--card); border:1px dashed var(--line); border-radius:16px; }
+  .selo { display:inline-block; padding:2px 10px; border-radius:999px; font-size:.78rem; font-weight:700; background:#eee; color:#444; }
+  .s-pago { background:#dff3e6; color:#17623a; } .s-enviado { background:#dde9fb; color:#1d4f9c; } .s-entregue { background:#e6e0f7; color:#4a2f9a; }
+  .s-aguardandopagamento { background:#fff0c9; color:#7a5a00; } .s-cancelado { background:#fbe0de; color:#9a2018; }
+  .demo-tag { background:#eee; border-radius:6px; padding:1px 6px; color:var(--muted); }
+  td small { color:var(--muted); }
+
+  /* pagamentos */
+  .gw { grid-template-columns:auto 1fr; align-items:start; gap:12px; padding:14px; border:1.5px solid var(--line); border-radius:12px; font-weight:400; cursor:pointer; }
+  .gw:has(input:checked) { border-color:var(--accent); background:#f1f7f3; }
+  .gw strong { font-size:1rem; } .gw small { color:var(--muted); font-size:.88rem; }
+  .rec { background:var(--accent); color:#fff !important; border-radius:999px; padding:1px 8px; font-weight:700; }
+  .grade2 { grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); }
+  .qr { width:200px; aspect-ratio:1; background:#fff; border:1px solid var(--line); border-radius:12px; padding:6px; } .qr svg { height:100%; }
+  #pix-previa { display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start; } #pix-previa textarea { flex:1; min-width:220px; font:.78rem/1.3 ui-monospace,monospace; }
+  .lista-gw { display:grid; gap:10px; margin-bottom:16px; }
+  dialog { border:0; border-radius:16px; padding:24px; width:min(560px,calc(100% - 24px)); box-shadow:0 30px 80px rgba(0,0,0,.3); } dialog::backdrop { background:rgba(20,15,10,.5); }
+  dialog .x { display:block; position:absolute; top:8px; right:8px; margin:0; } dialog .x button { width:40px; min-height:40px; padding:0; font-size:1.5rem; border-radius:50%; border:0; }
+  dialog ul { padding-left:20px; }
 </style>
 </head>
 <body>
 <header>
   <h1>Painel da loja</h1>
-  <a href="index.html">← Voltar para os modelos</a>
+  <nav><a href="index.html">← Voltar para os modelos</a><button class="linkbtn" id="b-sair" type="button">Sair</button></nav>
 </header>
-<main>
-  <div class="aviso">Neste modelo de demonstração, o que você cadastrar fica salvo <strong>neste navegador</strong> e aparece nos 3 modelos. Na versão final, o cadastro fica guardado online para a loja inteira.</div>
 
-  <section aria-labelledby="t-prod">
-    <h2 id="t-prod"><span id="titulo-form">Cadastrar produto</span></h2>
-    <p class="dica">Preencha e toque em salvar. Sem foto, o site desenha a peça com as cores que você escolher.</p>
-    <form id="f-prod">
-      <label>Nome da peça<input id="p-nome" required maxlength="60" placeholder="Ex.: Vestido Girassol"></label>
-      <label>Preço (R$)<input id="p-preco" required inputmode="decimal" placeholder="89,90"></label>
-      <label>Categoria
-        <input id="p-cat" list="cats" required maxlength="30" placeholder="Vestidos, Meninos, Princesas, Natal…">
-        <datalist id="cats"></datalist>
-      </label>
-      <label>Tamanhos <small>separe por vírgula</small><input id="p-tams" placeholder="1, 2, 3, 4"></label>
-      <label class="largo">Descrição<textarea id="p-desc" maxlength="400" placeholder="Tecido, acabamento, o que torna a peça única…"></textarea></label>
-      <label>Foto da peça <small>opcional</small><input id="p-foto" type="file" accept="image/*"></label>
-      <label>Tipo do desenho <small>usado quando não há foto</small>
-        <select id="p-tipo"><option value="vestido">Vestido</option><option value="menino">Conjunto menino</option><option value="princesa">Princesa</option><option value="natal">Natal</option></select>
-      </label>
-      <div class="cores">
-        <label>Cor 1<input id="p-c1" type="color" value="#e9b8c4"></label>
-        <label>Cor 2<input id="p-c2" type="color" value="#fff7ec"></label>
-      </div>
-      <label><span>Destaque na página inicial</span><select id="p-dest"><option value="0">Não</option><option value="1">Sim</option></select></label>
-      <div class="previa largo"><div class="quadro" id="previa"></div><div class="acoes">
-        <button class="primario" type="submit">Salvar produto</button>
-        <button type="button" id="b-cancelar" hidden>Cancelar edição</button>
-        <button type="button" id="b-tirar-foto" hidden>Remover foto</button>
-      </div></div>
+<div id="login" hidden>
+  <div class="cartao">
+    <h2>Entrar no painel</h2>
+    <p class="dica">Área do administrador da loja.</p>
+    <form id="f-login">
+      <label>Senha<input id="l-senha" type="password" autocomplete="current-password" required></label>
+      <p class="erro" id="l-erro" role="alert"></p>
+      <button class="primario" type="submit">Entrar</button>
     </form>
-  </section>
+    <p class="aviso" style="margin:0">Demonstração: a senha de teste é <strong>demo123</strong> e pode ser trocada na aba Loja. Na versão final o login é feito no servidor (e-mail e senha de verdade).</p>
+  </div>
+</div>
 
-  <section aria-labelledby="t-lista">
-    <h2 id="t-lista">Produtos cadastrados (<span id="qtd">0</span>)</h2>
-    <p class="dica">Toque em Editar para mudar preço, nome ou foto. Excluir não pode ser desfeito.</p>
+<main id="painel" hidden>
+  <div class="aviso">Neste modelo de demonstração, tudo o que você cadastrar fica salvo <strong>neste navegador</strong>. Na versão final, pedidos, clientes e produtos ficam guardados online, para a loja inteira.</div>
+
+  <div class="abas" role="tablist" aria-label="Seções do painel">
+    <button role="tab" data-aba="visao">Visão geral</button>
+    <button role="tab" data-aba="pedidos">Pedidos</button>
+    <button role="tab" data-aba="clientes">Clientes</button>
+    <button role="tab" data-aba="produtos">Produtos</button>
+    <button role="tab" data-aba="pagamentos">Pagamentos</button>
+    <button role="tab" data-aba="envio">Envio</button>
+    <button role="tab" data-aba="loja">Loja</button>
+  </div>
+
+  <!-- VISÃO GERAL -->
+  <div data-pane="visao">
+    <div class="barra"><label>Período<select id="periodo"><option value="7">Últimos 7 dias</option><option value="30" selected>Últimos 30 dias</option><option value="90">Últimos 90 dias</option></select></label></div>
+    <div id="visao-corpo"></div>
+  </div>
+
+  <!-- PEDIDOS -->
+  <section class="painel-sec" data-pane="pedidos" aria-labelledby="t-ped" hidden>
+    <h2 id="t-ped">Pedidos</h2>
+    <p class="dica">Pedidos feitos pelo site. “Aguardando pagamento” é quem preencheu os dados mas ainda não pagou.</p>
+    <div class="barra">
+      <label>Buscar<input id="ped-busca" type="search" placeholder="Nº do pedido, nome ou e-mail"></label>
+      <label>Situação<select id="ped-status"><option value="">Todas</option><option value="aguardando pagamento">Aguardando pagamento</option><option value="pago">Pago</option><option value="enviado">Enviado</option><option value="entregue">Entregue</option><option value="cancelado">Cancelado</option></select></label>
+    </div>
     <div class="tabela-rolagem"><table>
-      <thead><tr><th></th><th>Peça</th><th>Categoria</th><th>Preço</th><th>Ações</th></tr></thead>
-      <tbody id="lista"></tbody>
+      <thead><tr><th>Pedido</th><th>Data</th><th>Cliente</th><th>Total</th><th>Pagamento</th><th>Situação</th><th></th></tr></thead>
+      <tbody id="ped-lista"></tbody>
     </table></div>
   </section>
 
-  <section aria-labelledby="t-loja">
-    <h2 id="t-loja">Dados da loja</h2>
-    <p class="dica">Campos vazios não aparecem no site. O WhatsApp recebe os pedidos do carrinho.</p>
-    <form id="f-loja">
-      <label>Nome da loja<input id="c-nome" maxlength="50"></label>
-      <label>WhatsApp <small>só números, com DDD</small><input id="c-whatsapp" inputmode="numeric" placeholder="5571999999999"></label>
-      <label>CNPJ<input id="c-cnpj" placeholder="00.000.000/0000-00"></label>
-      <label>Cidade<input id="c-cidade" placeholder="Aratuípe/BA"></label>
-      <label>Instagram <small>sem o @</small><input id="c-instagram"></label>
-      <label class="largo">Frase da loja<input id="c-slogan" maxlength="120"></label>
-      <label class="largo">Aviso de frete e prazo<input id="c-frete" maxlength="140"></label>
-      <div class="acoes largo"><button class="primario" type="submit">Salvar dados da loja</button></div>
+  <!-- CLIENTES -->
+  <section class="painel-sec" data-pane="clientes" aria-labelledby="t-cli" hidden>
+    <h2 id="t-cli">Clientes (<span id="cli-qtd">0</span>)</h2>
+    <p class="dica">Quem comprou e quem começou a compra e não finalizou, para a loja poder chamar no WhatsApp.</p>
+    <div class="barra">
+      <label>Buscar<input id="cli-busca" type="search" placeholder="Nome, e-mail ou telefone"></label>
+      <label>Mostrar<select id="cli-filtro"><option value="">Todos</option><option value="comprou">Quem comprou</option><option value="nao">Quem não comprou</option></select></label>
+      <button type="button" id="b-csv">Exportar planilha (CSV)</button>
+    </div>
+    <div class="tabela-rolagem"><table>
+      <thead><tr><th>Cliente</th><th>Contato</th><th>Compras</th><th>Total gasto</th><th>Último contato</th><th>Situação</th></tr></thead>
+      <tbody id="cli-lista"></tbody>
+    </table></div>
+  </section>
+
+  <!-- PRODUTOS -->
+  <div data-pane="produtos" hidden style="display:grid;gap:20px">
+    <section class="painel-sec" aria-labelledby="t-prod">
+      <h2 id="t-prod"><span id="titulo-form">Cadastrar produto</span></h2>
+      <p class="dica">Preencha e toque em salvar. Sem foto, o site desenha a peça com as cores que você escolher.</p>
+      <form id="f-prod">
+        <label>Nome da peça<input id="p-nome" required maxlength="60" placeholder="Ex.: Vestido Girassol"></label>
+        <label>Preço (R$)<input id="p-preco" required inputmode="decimal" placeholder="89,90"></label>
+        <label>Categoria
+          <input id="p-cat" list="cats" required maxlength="30" placeholder="Vestidos, Meninos, Princesas, Natal…">
+          <datalist id="cats"></datalist>
+        </label>
+        <label>Tamanhos <small>separe por vírgula</small><input id="p-tams" placeholder="1, 2, 3, 4"></label>
+        <label class="largo">Descrição<textarea id="p-desc" maxlength="400" placeholder="Tecido, acabamento, o que torna a peça única…"></textarea></label>
+        <label>Foto da peça <small>opcional</small><input id="p-foto" type="file" accept="image/*"></label>
+        <label>Tipo do desenho <small>usado quando não há foto</small>
+          <select id="p-tipo"><option value="vestido">Vestido</option><option value="menino">Conjunto menino</option><option value="princesa">Princesa</option><option value="natal">Natal</option></select>
+        </label>
+        <div class="cores">
+          <label>Cor 1<input id="p-c1" type="color" value="#e9b8c4"></label>
+          <label>Cor 2<input id="p-c2" type="color" value="#fff7ec"></label>
+        </div>
+        <label><span>Destaque na página inicial</span><select id="p-dest"><option value="0">Não</option><option value="1">Sim</option></select></label>
+        <div class="previa largo"><div class="quadro" id="previa"></div><div class="acoes">
+          <button class="primario" type="submit">Salvar produto</button>
+          <button type="button" id="b-cancelar" hidden>Cancelar edição</button>
+          <button type="button" id="b-tirar-foto" hidden>Remover foto</button>
+        </div></div>
+      </form>
+    </section>
+    <section class="painel-sec" aria-labelledby="t-lista">
+      <h2 id="t-lista">Produtos cadastrados (<span id="qtd">0</span>)</h2>
+      <p class="dica">Toque em Editar para mudar preço, nome ou foto. Excluir não pode ser desfeito.</p>
+      <div class="tabela-rolagem"><table>
+        <thead><tr><th></th><th>Peça</th><th>Categoria</th><th>Preço</th><th>Ações</th></tr></thead>
+        <tbody id="lista"></tbody>
+      </table></div>
+    </section>
+  </div>
+
+  <!-- PAGAMENTOS -->
+  <section class="painel-sec" data-pane="pagamentos" aria-labelledby="t-pag" hidden>
+    <h2 id="t-pag">Pagamentos</h2>
+    <p class="dica">Como a loja recebe. Sugestão para o cliente avaliar: escolha o gateway, vincule a conta dele e cadastre a chave Pix.</p>
+    <form id="f-pag" style="grid-template-columns:1fr">
+      <div>
+        <h3>1. Gateway de pagamento (quem processa o cartão)</h3>
+        <div class="lista-gw" id="gw-lista"></div>
+        <div class="acoes"><span id="conta-estado"></span><button type="button" id="b-vincular"></button></div>
+        <p class="dica" style="margin-top:8px">Na versão final, “Vincular conta” abre a página oficial do gateway, o dono da loja entra na conta dele e autoriza. Os repasses caem direto nessa conta. Taxas e prazos variam por plano: conferir no site de cada gateway antes de decidir.</p>
+      </div>
+      <div>
+        <h3>2. Pix da loja</h3>
+        <div class="grade2" style="display:grid;gap:14px">
+          <label>Nome do titular<input id="pg-titular" maxlength="60"></label>
+          <label>Tipo de chave<select id="pg-tipo"><option value="email">E-mail</option><option value="telefone">Telefone</option><option value="cpf">CPF</option><option value="cnpj">CNPJ</option><option value="aleatoria">Chave aleatória</option></select></label>
+          <label>Chave Pix<input id="pg-chave" autocomplete="off"></label>
+          <label>Cidade do titular<input id="pg-cidade" maxlength="40"></label>
+        </div>
+        <h3 style="margin-top:14px">QR Code de teste (R$ 1,00)</h3>
+        <div id="pix-previa"></div>
+        <p class="dica">O QR segue o padrão Pix do Banco Central e paga na conta da chave cadastrada. Teste com o app do banco antes de divulgar a loja.</p>
+      </div>
+      <div>
+        <h3>3. Formas aceitas no site</h3>
+        <div class="acoes">
+          <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="pg-pix"> Pix</label>
+          <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="pg-cartao"> Cartão de crédito</label>
+          <label style="display:flex;align-items:center;gap:8px">Parcelas sem juros até <input id="pg-parc" type="number" min="1" max="12" style="width:80px"></label>
+        </div>
+      </div>
+      <div class="acoes"><button class="primario" type="submit">Salvar pagamentos</button></div>
     </form>
   </section>
 
-  <section aria-labelledby="t-bkp">
-    <h2 id="t-bkp">Cópia de segurança</h2>
-    <p class="dica">Baixe uma cópia dos produtos e dos dados da loja, ou volte para os produtos de exemplo.</p>
-    <div class="acoes">
-      <button id="b-baixar" type="button">Baixar cópia</button>
-      <input id="b-subir" type="file" accept="application/json" hidden>
-      <button type="button" id="b-subir-btn">Restaurar cópia</button>
-      <button class="perigo" id="b-exemplos" type="button">Voltar aos produtos de exemplo</button>
-    </div>
+  <!-- ENVIO -->
+  <section class="painel-sec" data-pane="envio" aria-labelledby="t-env" hidden>
+    <h2 id="t-env">Envio</h2>
+    <p class="dica">Sugestão para o cliente avaliar. Na demonstração o frete é uma estimativa; na versão final o valor vem do <strong>Melhor Envio</strong> (Correios e transportadoras no mesmo lugar, com etiqueta e rastreio) calculado pelo CEP e pelo peso.</p>
+    <form id="f-env" style="grid-template-columns:1fr">
+      <div class="grade2" style="display:grid;gap:14px">
+        <label>CEP de origem <small>de onde a loja despacha</small><input id="en-cep" inputmode="numeric" placeholder="00000-000"></label>
+        <label>Frete grátis a partir de (R$) <small>0 desliga</small><input id="en-gratis" inputmode="decimal"></label>
+      </div>
+      <div class="tabela-rolagem"><table>
+        <thead><tr><th>Opção</th><th>Prazo mostrado</th><th>Valor base (R$)</th><th>Pode ser grátis</th><th>Ativa</th></tr></thead>
+        <tbody id="en-lista"></tbody>
+      </table></div>
+      <div class="acoes"><button class="primario" type="submit">Salvar envio</button></div>
+    </form>
   </section>
+
+  <!-- LOJA -->
+  <div data-pane="loja" hidden style="display:grid;gap:20px">
+    <section class="painel-sec" aria-labelledby="t-loja">
+      <h2 id="t-loja">Dados da loja</h2>
+      <p class="dica">Campos vazios não aparecem no site. O WhatsApp recebe os pedidos do carrinho.</p>
+      <form id="f-loja">
+        <label>Nome da loja<input id="c-nome" maxlength="50"></label>
+        <label>WhatsApp <small>só números, com DDD</small><input id="c-whatsapp" inputmode="numeric" placeholder="5571999999999"></label>
+        <label>CNPJ<input id="c-cnpj" placeholder="00.000.000/0000-00"></label>
+        <label>Cidade<input id="c-cidade" placeholder="Aratuípe/BA"></label>
+        <label>Instagram <small>sem o @</small><input id="c-instagram"></label>
+        <label>Senha do painel <small>só nesta demonstração</small><input id="c-adminSenha" type="text" autocomplete="off"></label>
+        <label class="largo">Frase da loja<input id="c-slogan" maxlength="120"></label>
+        <label class="largo">Aviso de frete e prazo<input id="c-frete" maxlength="140"></label>
+        <div class="acoes largo"><button class="primario" type="submit">Salvar dados da loja</button></div>
+      </form>
+    </section>
+    <section class="painel-sec" aria-labelledby="t-demo">
+      <h2 id="t-demo">Dados de exemplo</h2>
+      <p class="dica">Cria pedidos e clientes fictícios para mostrar o painel com movimento. Não afeta pedidos reais.</p>
+      <div class="acoes"><button id="b-semear2" type="button">Criar pedidos de exemplo</button><button class="perigo" id="b-limpar-demo" type="button">Remover pedidos de exemplo</button></div>
+    </section>
+    <section class="painel-sec" aria-labelledby="t-bkp">
+      <h2 id="t-bkp">Cópia de segurança</h2>
+      <p class="dica">Baixe uma cópia de produtos, pedidos e configurações, ou volte para os produtos de exemplo.</p>
+      <div class="acoes">
+        <button id="b-baixar" type="button">Baixar cópia</button>
+        <input id="b-subir" type="file" accept="application/json" hidden>
+        <button type="button" id="b-subir-btn">Restaurar cópia</button>
+        <button class="perigo" id="b-exemplos" type="button">Voltar aos produtos de exemplo</button>
+      </div>
+    </section>
+  </div>
 </main>
+
+<dialog id="dlg-ped" aria-label="Detalhes do pedido"></dialog>
 <div id="msg" role="status"></div>
 
 <script src="shared/config.js"></script>
 <script src="shared/loja.js"></script>
+<script src="shared/pagamentos.js"></script>
+<script src="shared/painel.js"></script>
 <script>
 (function () {
-  var L = window.Loja, $ = function (s) { return document.querySelector(s); };
+  var L = window.Loja, P = window.LojaPagamentos, $ = function (s) { return document.querySelector(s); };
   var editando = null, fotoNova, fotoRemovida = false;
 
-  function aviso(t) { var m = $("#msg"); m.textContent = t; m.classList.add("on"); clearTimeout(aviso.t); aviso.t = setTimeout(function () { m.classList.remove("on"); }, 2800); }
+  function aviso(t) { window.Painel.aviso(t); }
   function salvarProdutos(l) { if (!L.gravar(L.K.PROD, l)) { aviso("Não coube na memória do navegador. Use fotos menores."); return false; } return true; }
   function preco(s) { return Number(String(s).replace(/\./g, "").replace(",", ".")); }
   function novoId() { return "p" + Date.now().toString(36); }
@@ -216,18 +391,20 @@
   });
 
   /* dados da loja */
-  var campos = ["nome", "whatsapp", "cnpj", "cidade", "instagram", "slogan", "frete"];
+  var campos = ["nome", "whatsapp", "cnpj", "cidade", "instagram", "slogan", "frete", "adminSenha"];
   function preencherLoja() { var c = L.config(); campos.forEach(function (k) { $("#c-" + k).value = c[k] || ""; }); }
   $("#f-loja").addEventListener("submit", function (e) {
     e.preventDefault(); var c = {};
     campos.forEach(function (k) { c[k] = $("#c-" + k).value.trim(); });
     c.whatsapp = c.whatsapp.replace(/\D/g, ""); c.instagram = c.instagram.replace(/^@/, "");
+    if (!c.adminSenha) c.adminSenha = "demo123";
     if (L.gravar(L.K.CFG, c)) aviso("Dados da loja salvos."); else aviso("Não foi possível salvar.");
   });
 
   /* backup */
   $("#b-baixar").addEventListener("click", function () {
-    var blob = new Blob([JSON.stringify({ produtos: L.produtos(), config: L.config() }, null, 2)], { type: "application/json" });
+    var dados = { produtos: L.produtos(), config: L.config(), pedidos: P.pedidos(), pagamento: P.pagamento(), envio: P.envio() };
+    var blob = new Blob([JSON.stringify(dados, null, 2)], { type: "application/json" });
     var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "copia-da-loja.json"; a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
   });
   $("#b-subir-btn").addEventListener("click", function () { $("#b-subir").click(); });
@@ -237,7 +414,12 @@
       try {
         var d = JSON.parse(r.result);
         if (!Array.isArray(d.produtos)) throw 0;
-        if (confirm("Substituir os produtos atuais por esta cópia?")) { L.gravar(L.K.PROD, d.produtos); if (d.config) L.gravar(L.K.CFG, d.config); desenharLista(); preencherLoja(); aviso("Cópia restaurada."); }
+        if (confirm("Substituir os dados atuais por esta cópia?")) {
+          L.gravar(L.K.PROD, d.produtos); if (d.config) L.gravar(L.K.CFG, d.config);
+          if (Array.isArray(d.pedidos)) P.salvarPedidos(d.pedidos);
+          if (d.pagamento) L.gravar(P.K.PAG, d.pagamento); if (d.envio) L.gravar(P.K.ENV, d.envio);
+          desenharLista(); preencherLoja(); aviso("Cópia restaurada.");
+        }
       } catch (x) { aviso("Esse arquivo não parece ser uma cópia da loja."); }
     };
     r.readAsText(a); e.target.value = "";

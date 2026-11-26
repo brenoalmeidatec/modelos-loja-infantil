@@ -7,5 +7,6 @@ window.LOJA_CONFIG_PADRAO = {
   cnpj: "",
   cidade: "",
   instagram: "",  // Ex.: costuricesdocampo
-  frete: "Frete e prazo combinados direto pelo WhatsApp."
+  frete: "Frete e prazo combinados direto pelo WhatsApp.",
+  adminSenha: "demo123"  // senha do painel NESTA DEMONSTRAÇÃO. Fica visível no código: não é segurança de verdade (a versão final terá login no servidor).
 };

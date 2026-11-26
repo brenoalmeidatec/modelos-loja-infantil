@@ -135,6 +135,7 @@
       '<div class="gaveta-lista" data-lista></div>' +
       '<footer class="gaveta-pe"><div class="gaveta-total"><span>Total</span><strong data-total></strong></div>' +
       '<p class="gaveta-nota" data-nota></p>' +
+      '<button class="gaveta-finalizar" data-finalizar hidden>Finalizar compra · Pix ou cartão</button>' +
       '<button class="gaveta-pedir" data-pedir>Pedir pelo WhatsApp</button>' +
       '<p class="gaveta-aviso" data-aviso role="status" hidden></p></footer></div>';
     document.body.appendChild(gaveta);
@@ -158,6 +159,7 @@
       if (ab) { abrirPeca(ab.getAttribute("data-produto")); return; }
       var q = t.closest("[data-qtd]");
       if (q) { var p = q.getAttribute("data-qtd").split("|"); mudarQtd(p[0], p[1], Number(p[2])); return; }
+      if (t.closest("[data-finalizar]")) { if (window.LojaPagamentos) { fecharCarrinho(); window.LojaPagamentos.abrir(); } return; }
       if (t.closest("[data-pedir]")) { pedir(); return; }
       var tb = t.closest("[data-tam]");
       if (tb) { tamSel = tb.getAttribute("data-tam"); marcarTam(); return; }
@@ -199,6 +201,8 @@
     gaveta.querySelector("[data-total]").textContent = brl(total());
     gaveta.querySelector("[data-nota]").textContent = config().frete || "";
     gaveta.querySelector("[data-pedir]").disabled = !ls.length;
+    var fin = gaveta.querySelector("[data-finalizar]");
+    fin.hidden = !window.LojaPagamentos; fin.disabled = !ls.length;
   }
 
   function pedir() {
@@ -287,6 +291,8 @@
   window.Loja = {
     EXEMPLOS: EXEMPLOS, K: { PROD: K_PROD, CFG: K_CFG, CART: K_CART },
     ler: ler, gravar: gravar, config: config, produtos: produtos, categorias: categorias,
-    brl: brl, esc: esc, arte: arte, arteEl: arteEl, imagem: imagem, vitrine: vitrine, iniciar: iniciar
+    brl: brl, esc: esc, arte: arte, arteEl: arteEl, imagem: imagem, vitrine: vitrine, iniciar: iniciar,
+    linhas: linhas, total: total, abrirCarrinho: abrirCarrinho,
+    limparCarrinho: function () { salvarCarrinho([]); }
   };
 })();
